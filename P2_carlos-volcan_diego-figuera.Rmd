@@ -1,0 +1,196 @@
+---
+title: "¿Milagro o dictadura?: Una explicación del exito económico de Corea del Sur"
+author: "Carlos Volcán y Diego Figuera"
+date: "2 de diciembre de 2022"
+output:
+   html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    collapsed: true
+    smooth_scroll: true
+    theme: journal
+    highlight: kate
+    df_print: paged
+    code_folding: show
+---
+
+
+# Introducción
+<p><span style="color: rgb(0, 0, 0);">"El milagro econ&oacute;mico de Corea del Sur no fue m&aacute;s que el resultado </span><span style="color: rgb(0, 0, 0);">de incentivos y una gran direcci&oacute;n estatal" (Ha-Joong Chang)</span></p>
+<p><span style="color: rgb(0, 0, 0);">Corea del Sur pas&oacute; de tener un PIB per c&aacute;pita de USD 153,6 en 1960 a USD 34751,72 en 2021, lo que significa un incremento de 7% anual del mismo durante el periodo, porcentajes que los pa&iacute;ses desarrollados solo pueden envidiar. Incluso, es destacable que Corea del Sur fue devastada econ&oacute;micamente por la guerra de las coreas y su vecino del norte se encontraba en mejores condiciones econ&oacute;micas para el periodo 1953-1970. Lo que quiere decir que, para 1960, Corea ten&iacute;a una econom&iacute;a post-guerra, con las menores reservas de recursos naturales del mundo y un deficiente capital humano.</span></p>
+<p><span style="color: rgb(0, 0, 0);">Otros pa&iacute;ses en la &eacute;poca, como Venezuela, ten&iacute;an unas condiciones iniciales totalmente distintas. En este caso, el estado venezolano recientemente aumentaba su participaci&oacute;n en la industria petrolera nacional cambiando el fifty-fifty de Romulo Betancourt, asimismo era el mayor productor y exportador de petr&oacute;leo del mundo con las mayores reservas, lo que generaba enormes rentas hacia el pa&iacute;s. Sin embargo, Venezuela pas&oacute; de un PIB per capita de USD 953 a apenas USD 1690,66 en 2021 seg&uacute;n estimaciones.</span></p>
+<p><span style="color: rgb(0, 0, 0);">Con lo anteriormente descrito, definitivamente parece que Corea del Sur fue bendecida con un milagro econ&oacute;mico. No obstante, dicha situaci&oacute;n tiene una f&aacute;cil explicaci&oacute;n y es que el inesperado crecimiento econ&oacute;mico se debe a la planificaci&oacute;n estatal y el sistema de incentivos aplicado bajo la dictadura de Park Chun Hee, tercer presidente de la Rep&uacute;blica de Corea que gobern&oacute; con mano f&eacute;rrea desde 1963 hasta su muerte en 1979, lo que significa m&aacute;s de 16 a&ntilde;os de su politica econ&oacute;mica. Es por eso que es importante analizar y comparar los resultados econ&oacute;micos de dichas pol&iacute;ticas que se consideran el pilar del crecimiento de Corea del Sur.</span></p>
+
+# Datos utilizados
+### Librerías necesarias
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">En este caso, las librer&iacute;as _tidyverse_ y _knitr_ tienen incluidas todas las librer&iacute;as necesarias para el correcto funcionamiento de los scripts que se colocar&aacute;n a continuaci&oacute;n, por lo que se realiza su instalaci&oacute;n:</span></p>
+
+```{r Librerías, echo=TRUE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+library(ggthemes)
+```
+### Carga de datos
+```{r Carga de datos, echo=TRUE, warning=FALSE}
+gdp <- read_excel("base_limpia.xlsx", sheet = "gdp")
+importcapacity <- read_excel("base_limpia.xlsx", sheet = "importcapacity")
+pibeduc <- read_excel("base_limpia.xlsx", sheet = "pwt100")
+```
+### Presentación de los datos
+<p><span style="color: rgb(0, 0, 0);">En este caso, se extranjeron datos de varias fuentes oficiales que se mencionar&aacute;n a medida que sea pertinente. Los mismos son para el periodo desde 1960, cuando Park Chung Hee di&oacute; un golpe de Estado antes de llegar al poder, hasta el 2018. Principalmente se utilizaron variables econ&oacute;micas como PIB, pib per c&aacute;pita,&nbsp; para ver reflejada los resultados de las pol&iacute;ticas de Park. Asimismo, los datos se extrajeron para tres pa&iacute;ses: Corea del Sur, Venezuela y Estados Unidos.&nbsp; Es importante que el lector este consciente de los siguientes conceptos:</span></p>
+<ol>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);"><strong>Producto interno bruto (PIB)</strong>: valor agregado de la producci&oacute;n de bienes finales nacional, medido en d&oacute;lares. Extra&iacute;do de&nbsp;<em>Our World in Data.</em></span></li>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);"><strong>Capacidad de importar:&nbsp;</strong>es el valor de las exportaciones medido a precios de importaciones para determinar cuanto se puede comprar en el exterior con el flujo de divisa que entra a partir de las ventas hacia el resto del mundo. Extra&iacute;do de&nbsp;<em>World Bank</em>.</span></li>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);"><strong>PIB per c&aacute;pita</strong>: distribuci&oacute;n equitativa del la producci&oacute;n del pa&iacute;s entre todos sus habitantes, frecuentemente utilizado como&nbsp;<em>proxy</em> del nivel de ingreso per c&aacute;pita.&nbsp;<em>Calculo propio a partir de datos de Peen World Table 10.0 y Our World in Data.</em></span></li>
+<li style="color: rgb(0, 0, 0);"><strong>Capital nominal:</strong> valor del stock de capital que hay en la econom&iacute;a para un momento dado.</li>
+<li style="color: rgb(0, 0, 0);"><strong>Crecimiento econ&oacute;mico:&nbsp;</strong>cuanto crece o decrece el PIB de a&ntilde;o a a&ntilde;o.&nbsp;<em>Calculado a partir de datos de our World in Data.</em></li>
+</ol>
+
+### Transformaciones realizadas
+<p>Se realizaron dos calculos a efectos de la investigaci&oacute;n:</p>
+<ol>
+<li>Se calculo el crecimiento econ&oacute;mico;</li>
+<li>Se calculo el PIB per c&aacute;pita.</li>
+</ol>
+<p>Su calculo se puede observar en el siguiente recuadro:</p>
+
+```{r Transformaciones, echo=TRUE, warning=FALSE}
+#Calculo crecimiento economico:
+gdp <- gdp %>% 
+
+  group_by(Entity) %>%
+ 
+  mutate(growth = (GDP-lag(GDP))/lag(GDP)*100) 
+
+#Calculo PIB per capita:
+pibeduc <- pibeduc %>%
+
+  group_by(country) %>%
+  
+  mutate(pibperc = rgdpe/pop) 
+```
+
+# Análisis descriptivo
+<p><span style="color: rgb(0, 0, 0);">Debe estar claro entonces que la cuesti&oacute;n principal es indigar sobre los efectos de las pol&iacute;ticas del dictador Park sobre la econom&iacute;a surcoreano a corto y largo plazo. En resumidas cuentas, dichas pol&iacute;ticas se basaron en una coordinaci&oacute;n estatal masiva en todo el territorio e incentivos econ&oacute;micos para impulsar la econom&iacute;a. Entre las cosas m&aacute;s relevantes se encuentran:</span></p>
+<ol>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);">Cuotas obligatorias de exportaciones a cumplir para los productores nacionales. Si no se cumpl&iacute;an, hab&iacute;an consecuencias legales;</span></li>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);">Subsidio masivo de p&eacute;rdida para las compa&ntilde;&iacute;as que se dediquen a la investigaci&oacute;n y desarrollo;</span></li>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);">Incentivos fiscales a trav&eacute;s de bajos impuestos a las ganancias empresariales;</span></li>
+<li style="color: rgb(0, 0, 0);"><span style="color: rgb(0, 0, 0);">Fuertes restricciones a la importaci&oacute;n. Se dec&iacute;an los productos sujetos a importaci&oacute;n y no los prohibidos de tan larga que era la lista.</span></li>
+</ol>
+<p><span style="color: rgb(0, 0, 0);">Es destacable que, la econom&iacute;a surcoreana era mayoritamente regida por negocios familiares llamados en aqu&eacute;l entonces&nbsp;<em>chaebol</em>. Por ejemplo, la empresa m&aacute;s grande del pa&iacute;s hoy d&iacute;a, Samsung, empez&oacute; como un chaebol vendiendo alimentos y gracias a la estrategia anterior ella y muchas otras se pudieron beneficiar para desplazarse hacia un sector t&eacute;cnologico hyper-rentable. Incluso, empresas como Hyundai se vieron forzadas por el gobierno a innovar. El gobierno surcoreano una vez les pidi&oacute; un barco y ellos solo se dedicaban al automovilismo en la decada de los 70's. &Eacute;l mismo los oblig&oacute; por la fuerza pero subsidiando su p&eacute;rdida y hoy producen barcos. </span></p>
+<p><span style="color: rgb(0, 0, 0);">Entonces se puede decir que la estrategia surcoronea se bas&oacute; en sustituci&oacute;n de importaciones a trav&eacute;s de los ingresos generados por las exportaciones. Incluso se puede observar el primer gr&aacute;fico para ilustrar el tema:</span></p>
+
+### Gráfico 1 - poder de compra de importaciones
+```{r Grafico 1, echo=TRUE, warning=FALSE}
+importcapacity %>% 
+ 
+  filter(pais == "Korea, Rep.") %>%
+
+  ggplot(aes(x = ano, y = importc/10^14)) +
+  geom_line(aes(color = "#31A1B3" ), size = 1.3) + 
+  geom_point(aes(color = "#31A1B3"), size = 2) +
+  
+  xlab("Año") + 
+  ylab("Exportaciones") +
+  ggtitle("Poder de compra de importaciones")+
+  theme(plot.title = element_text(size = 20, face = "bold"),
+        legend.position="none",
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold")) +
+  
+  scale_color_manual(values = "#31A1B3")
+```
+<p><span style="color: rgb(0, 0, 0);">All&iacute; se puede observar como pocos a&ntilde;os despu&eacute;s de la llegada de Park al poder, las exportaciones del pa&iacute;s son m&aacute;s capaces de comprar cada vez m&aacute;s y m&aacute;s importaciones. Es ir&oacute;nico teniendo en cuenta su pol&iacute;tica de sustituci&oacute;n de las mismas, pero termina de hacer sentido cuando se sabe que las divisas usadas para importar eran dirigidas a bienes de capital y producci&oacute;n, no a bienes de consumo. Dicen los&nbsp;<em>rumores</em> que los surcoreanos importaban m&aacute;quinas, las desmantelaban, las examinaban y luego ellos mismos constru&iacute;an las suyas.</span></p>
+<p><span style="color: rgb(0, 0, 0);">Esto evidentemente gener&oacute; un aumento del stock de capital en el pa&iacute;s. A esto se le suma la ingeniosa y h&aacute;bil fuerza de trabajo tambi&eacute;n promulgada por las pol&iacute;ticas educativas de Park. Es mentira que no ten&iacute;an nada antes de volverse la potencia que son hoy d&iacute;a. Ellos ten&iacute;an el activo m&aacute;s valioso: capital humano. Inclusive luego de la guerra, los surcoreanos ten&iacute;an el doble de a&ntilde;os de educaci&oacute;n que un venezolano en promedio. Aproximadamente estudiaban 5,2 a&ntilde;os mientras que en Venezuela solo estudiaban 2,4 para finales de la d&eacute;cada de los 60's. Para los a&ntilde;os 2000, el surcoreano promedio estudiaba 9,5 a&ntilde;os mientras que el venezolano solo 5,5.</span></p>
+<p><span style="color: rgb(0, 0, 0);">Definitivamente, esta combinaci&oacute;n de acumulaci&oacute;n de capital tanto f&iacute;sico como humano y estas pol&iacute;ticas super expansiva propocionaron un ambiente lleno de emprendimiento y competitividad que impulso la producci&oacute;n nacional: A continuaci&oacute;n se pueden ver una figura que ilustra lo dicho anteriormente compar&aacute;ndolo con Venezuela:</span></p>
+
+### Gráfico 2 - pib per cápita de Corea y Venezuela
+```{r Grafico 2, echo=TRUE, warning=FALSE}
+pibeduc %>%
+  
+  filter(country %in% c("Republic of Korea", "Venezuela (Bolivarian Republic of)")) %>%
+ 
+  ggplot(aes(x = year, y = pibperc, color = country, size = cn/10^6 )) +
+  geom_point() +
+
+  scale_color_tableau("Classic Cyclic") +
+
+  xlab("Año") + 
+  ylab("PIB Real per cápita") +
+  ggtitle("PIB Real per cápita para Corea del Sur y Venezuela")+
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold"),
+        legend.position = "bottom") +
+
+  labs(size = "Stock de capital", col = "País")
+```
+<p><span style="color: rgb(0, 0, 0);">En &eacute;l se hace una comparaci&oacute;n evidente. El tama&ntilde;o de los circulos representa el stock de capital acumulado. La gr&aacute;fica corresponde a una serie de tiempo del PIB per c&aacute;pita de Venezuela y Corea del Sur. En teor&iacute;a, Venezuela tiene uno de los recursos que m&aacute;s vali&oacute; durante el siglo XX y sigue valiendo en el XXI: el petr&oacute;leo. Ten&iacute;a todas las de ganar e incluso hasta la &eacute;poca de los 80's, en t&eacute;rminos de PIB per c&aacute;pita, Venezuela era mejor que Corea. Sin embargo, dado lo mencionado de la acumulaci&oacute;n de capital f&iacute;sico y humano, era solo cuesti&oacute;n de tiempo para que Corea del Sur superara Venezuela.&nbsp;</span></p>
+<p><span style="color: rgb(0, 0, 0);">Incluso, no solo super&oacute; a un pa&iacute;s en v&iacute;as de desarrollo. El nivel de coordinaci&oacute;n econ&oacute;mica e incentivos fue tal, que durante todo el restante del siglo XX, Corea creci&oacute; a pasos m&aacute;s grandes que los propios pa&iacute;ses desarrollados. Esto se puede observar en los dos siguientes gr&aacute;ficos:</span></p>
+<p>&nbsp;</p>
+
+### Gráfico 3 - crecimiento de Estados Unidos y Corea
+```{r Grafico 3, echo=TRUE, warning=FALSE}
+gdp %>% 
+
+  filter(Entity %in% c("South Korea", "United States") & Year %in% c(1960:2020)) %>%
+  
+  ggplot(aes(x = Year, y = growth, color = Entity)) +
+  geom_line(size = 1.3) + 
+  geom_point(size = 2) +
+  
+  geom_vline(xintercept = 1980, linetype = "dashed", color = "grey", size = 1) +
+
+  xlab("Año") + 
+  ylab("Crecimiento económico") +
+  ggtitle("Crecimiento económico anual de Corea del Sur y Estados Unidos") +
+  guides(color = guide_legend(title = "Países")) +
+  theme(plot.title = element_text(size = 20, face = "bold"),
+        legend.position="bottom",
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold"))+
+ 
+  geom_label(aes(x = 1980, y = -4, label ="Muerte de Park"),
+            size = 5, color = "black", family = "Times New Roman") +
+  
+  scale_color_tableau("Classic Cyclic")
+```
+
+### Gráfico 4 - ídem
+```{r Grafico 4, echo=TRUE, warning=FALSE}
+gdp%>% 
+ 
+  filter(Entity %in% c("South Korea", "United States") & Year %in% c(1960:2020)) %>%
+ 
+  ggplot(aes(growth, fill = Entity,)) +
+ 
+  scale_fill_tableau("Classic Cyclic") +
+
+  geom_histogram(bins = 10, color = "grey") +
+ 
+  xlab("Crecimiento económico") + 
+  ylab("Frecuencia") +
+  ggtitle("Histograma del crecimiento anual") +
+  theme(plot.title = element_text(size = 20, face = "bold"),
+        legend.position="none",
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold")) +
+
+  facet_grid(.~Entity)
+```
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">Sabiendo que Estados Unidos era el protagonista de la guerra fr&iacute;a junto con la Uni&oacute;n Sovi&eacute;tica y la potencia econ&oacute;mica m&aacute;s grande del mundo para aqu&eacute;l momento, se esperar&iacute;a que creciera m&aacute;s que el resto del mundo. Sin embargo, los datos relevan lo contrario. El crecimiento econ&oacute;mio de Corea del Sur siempre estuvo por encima del de Estados Unidos, y por m&aacute;s de 7%, para el periodo hasta el 2010 que desde ese momento en adelante se homogeneizaron. Igual hay que reconocer el hecho de haber superado a Estados Unidos en cuanto a crecimiento por m&aacute;s de 40 a&ntilde;os.</span></p>
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">De todas maneras, se denotan dos &uacute;nicos periodos de decrecimiento para Corea: el primero fue en la muerte del presidente Park. El Movimiento Democr&aacute;tico de Gwangju. trat&oacute; de tomar el poder por la fuerza pero fallaron pero a costa de cientos de muertes y da&ntilde;os a la econom&iacute;a. La segunda fue en la crisis bancaria asi&aacute;tica.&nbsp;</span><span style="color: rgb(0, 0, 0);">A&uacute;n as&iacute;, en el histograma se denota la distribuci&oacute;n de frecuencias del crecimiento econ&oacute;mico de Corea. A pesar de ser m&aacute;s achicado, esta m&aacute;s sesgado a la derecha que Estados Unidos y se puede reafirmar lo ya dicho con ello. La mayor parte se explica porque, como consecuencia de las pol&iacute;ticas, la mayor&iacute;a de esos negocios familiares se transformaron en empresas que ya no solo compet&iacute;an a nivel nacional, sino internacional. Para la decada de los 80's todo la tecnolog&iacute;a que alguna vez se exportab hacia Corea, ahora es producida all&iacute;.</span></p>
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">Un &uacute;ltimo aspecto a destacar, es que todo esto ocurr&iacute;a a costa de ciertas libertades en el regimen de Park. No obstante, nunca hubo oposici&oacute;n de los surcoreanos hacia el regimen. No exist&iacute;an sindicatos ni organizaciones pol&iacute;ticas, incluso algunos comentan que, como la sociedad era tan igual de pobre, nadie ten&iacute;a que envidiarle a nadie y m&aacute;s bien la sociedad ten&iacute;a el esp&iacute;ritu para salir adelante y las medidas de Park fueron como <em>anillo al dedo.</em></span></p>
+
+# Conclusiones
+
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">El caso surcoreano no es ni milagro ni se le puede atribuir &uacute;nicamente a las medidas tomadas por la dictadura de Park. Si es totalmente cierto que de haber elegido otro rumbo econ&oacute;mico, probablemente estuviesen como sus vecinos del norte. Las cuatro medidas mencionadas al principio, restringieron las importaciones de bienes de consumo, fomentaron las exportaciones y la inversi&oacute;n en capital y fomentaron la investigaci&oacute;n y el desarrollo. Pero, m&aacute;s all&aacute; de esto, la sociedad coreana ataj&oacute; excelentemente las circunstancias. Una sociedad con esp&iacute;ritu innovador y resiliente. Hicieron la de <em>zero to hero</em>.&nbsp;</span></p>
+<p style="text-align: left;"><span style="color: rgb(0, 0, 0);">Sin embargo, tambi&eacute;n ser&iacute;a mentir al decir que la sociedad no ten&iacute;a nada para empezar. Si ten&iacute;an: educaci&oacute;n y por lo tanto, capital humano. Combinado con lo anterior, Corea transformo sus divisas en inversi&oacute;n, aumento su capacidad de compra de importaciones, creci&oacute; a un ritmo mucho mayor que pa&iacute;ses desarrollados y le gan&oacute; a otros que ten&iacute;an cientos de veces los recursos naturales que ellos. Dicen que el milagro coreano es obra de una super-coordinaci&oacute;n gubernamental en la econom&iacute;a, pero yo le sumar&iacute;a que es obra de su forma de pensar tambi&eacute;n.</span></p>
+
+# Referencias
+<p><span style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">[Rodrik, D. (1994).&nbsp;<em>Getting interventions right:</em> <em>How South Korea and Taiwan Grew Rich. </em>National Bureu of Economic Research.] (https://www.jstor.org/stable/1344538)</span></p>
+<p><span style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">[Wendover, P. (2022).&nbsp;<em>Samsung's dangerous dominance on Korea.&nbsp;</em>Youtube.] (https://www.youtube.com/watch?v=oL0umpPPe-8&amp;t=404s&amp;ab_channel=WendoverProductions)</span></p>
+<p>&nbsp;</p>
+
